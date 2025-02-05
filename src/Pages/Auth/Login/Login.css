@@ -1,0 +1,107 @@
+.login-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgb(217, 219, 244), rgb(215, 238, 239));
+    animation: gradient-animation 10s ease infinite;
+  }
+
+  #login-inner-container {
+    background-color: #f0f2f5;
+    padding: 20px;
+    max-width: 70%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  .login-header {
+    font-size: 40px;
+    font-weight: 600;
+    color: #000;
+    font-family: monospace;
+    animation: slideIn 1s ease-out;
+  }
+  
+  .login-description {
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 10px;
+    color: gray;
+    animation: slideIn 1.5s ease-out;
+  }
+  
+  .login-input {
+    width: 100%; 
+    max-width: 400px; 
+    height: 45px;
+    background-color: #fff;
+    border-width: 1px;
+    border-color: #000;
+    border-radius: 8px;
+    padding-left: 10px;
+    border: none;
+    box-shadow: 2px 2px 2px 2px rgba(236, 238, 241, 0.8);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .login-input:focus {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.8);
+  }
+  
+  .forgot-password {
+    width: 100%;
+    text-align: end;
+    margin-top: 5px;
+    color: rgba(0, 123, 255, 0.8);
+    font-weight: 400;
+  }
+  
+
+  #login-button {
+    width: 100%;
+    max-width: 400px; 
+    padding: 7px;
+    border-radius: 10px;
+    background-color: rgba(0, 123, 255, 0.8);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 500;
+    font-family: monospace;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .login-button:hover {
+    transform: scale(1.05);
+  }
+  
+
+
+
+  #sign-in-button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(67, 24, 255, 0.1);
+    font-size: 18px;
+    font-weight: 500;
+    color: #000;
+    font-family: monospace;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .sign-in-button:hover {
+    transform: scale(1.05);
+  }
+  
+  .logo{
+    height: 80px;
+    position: absolute;
+    left: "50%";
+    top: 10px;
+    width: 150px;
+  }
+  
+  
+  
