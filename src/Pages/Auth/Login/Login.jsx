@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Col, Container, Row } from "reactstrap";
 import login from "../../../Assests/login.png";
-import logo from "../../../Assests/logo.png";
-import "./login.css";
+
+import "./Login.css";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
