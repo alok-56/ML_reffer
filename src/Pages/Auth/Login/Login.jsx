@@ -74,7 +74,7 @@ const Login = () => {
             <div style={{ marginLeft: 30 }}>
               <h1 className="login-header">Login</h1>
               <p className="login-description">
-                Login to access your EzAtlas account
+                Login to access your account
               </p>
 
               {/* Email Input */}
