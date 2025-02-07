@@ -73,9 +73,7 @@ const Login = () => {
           <Col md={6}>
             <div style={{ marginLeft: 30 }}>
               <h1 className="login-header">Login</h1>
-              <p className="login-description">
-                Login to access your account
-              </p>
+              <p className="login-description">Login to access your account</p>
 
               {/* Email Input */}
               <div>

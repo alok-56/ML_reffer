@@ -20,9 +20,9 @@ import {
 const SupplierDatabase = () => {
   const [rowData, setRowData] = useState([]);
   const [columnDefs, setColumnDefs] = useState([]);
-  const [loading, setLoading] = useState(true); // General loading state for fetching data
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [modalOpen, setModalOpen] = useState(false); // Modal visibility
+  const [modalOpen, setModalOpen] = useState(false);
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
@@ -30,12 +30,16 @@ const SupplierDatabase = () => {
     referralCode: "",
     rank: "",
     publicKey: "",
-  }); // New user state
+  });
 
-  // Separate loading states for each action
   const [isAddingUser, setIsAddingUser] = useState(false);
   const [isDeletingUser, setIsDeletingUser] = useState(false);
   const [isAddingFunds, setIsAddingFunds] = useState(false);
+
+  // New state for handling search input and user selection
+  const [searchReferralCode, setSearchReferralCode] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -61,7 +65,6 @@ const SupplierDatabase = () => {
       }
 
       const data = await response.json();
-
       const transformedData = data.data.map((user) => ({
         id: user._id,
         name: user.Name,
@@ -90,10 +93,30 @@ const SupplierDatabase = () => {
     }
   };
 
+  // Handle Referral Code Search
+  const handleReferralCodeSearch = (e) => {
+    setSearchReferralCode(e.target.value);
+    const filtered = rowData.filter((user) =>
+      user.referralCode.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  };
+
+  // Select user from the search result
+  const handleSelectUser = (user) => {
+    setSelectedUser(user);
+    setNewUser((prevState) => ({
+      ...prevState,
+      referralCode: user.referralCode,
+    }));
+    setSearchReferralCode(""); // Reset the search input once a user is selected
+    setFilteredUsers([]); // Clear search results
+  };
+
   const handleDeleteUser = async (userId) => {
     setLoading(true);
     try {
-      setIsDeletingUser(true); // Set loading for delete operation
+      setIsDeletingUser(true);
       let token = localStorage.getItem("token");
       let response = await fetch(
         `https://wallet-seven-fawn.vercel.app/api/v1/users/blockuser/${userId}`,
@@ -123,7 +146,7 @@ const SupplierDatabase = () => {
       setError("Error deleting user: " + error.message);
       setLoading(false);
     } finally {
-      setIsDeletingUser(false); // Reset the delete loader
+      setIsDeletingUser(false);
       setLoading(false);
     }
   };
@@ -131,7 +154,7 @@ const SupplierDatabase = () => {
   const handleAddFunds = async (userId, amount) => {
     try {
       setLoading(true);
-      setIsAddingFunds(true); // Set loading for add funds operation
+      setIsAddingFunds(true);
       let token = localStorage.getItem("token");
       let response = await fetch(
         "https://wallet-seven-fawn.vercel.app/api/v1/transaction/addfund/admin",
@@ -158,17 +181,15 @@ const SupplierDatabase = () => {
     } catch (error) {
       setError("Error adding funds: " + error.message);
     } finally {
-      setIsAddingFunds(false); // Reset the add funds loader
+      setIsAddingFunds(false);
       setLoading(false);
     }
   };
 
-  // Open the modal for adding a new user
   const openAddUserModal = () => {
     setModalOpen(true);
   };
 
-  // Close the modal
   const closeAddUserModal = () => {
     setModalOpen(false);
     setNewUser({
@@ -178,23 +199,16 @@ const SupplierDatabase = () => {
       referralCode: "",
       rank: "",
       publicKey: "",
-    }); // Reset form
+    });
+    setSelectedUser(null); // Reset selected user
   };
 
-  // Handle adding a new user
   const handleAddUser = async () => {
     try {
-      setIsAddingUser(true); // Set loading for add user operation
+      setIsAddingUser(true);
       const { name, email, password, referralCode, rank, publicKey } = newUser;
 
-      if (
-        !name ||
-        !email ||
-        !password ||
-        !referralCode ||
-        !rank ||
-        !publicKey
-      ) {
+      if (!name || !email || !password || !referralCode || !rank || !publicKey) {
         alert("All fields are required!");
         return;
       }
@@ -231,7 +245,7 @@ const SupplierDatabase = () => {
     } catch (error) {
       setError("Error adding user: " + error.message);
     } finally {
-      setIsAddingUser(false); // Reset the add user loader
+      setIsAddingUser(false);
     }
   };
 
@@ -284,7 +298,7 @@ const SupplierDatabase = () => {
                   onAddFunds={handleAddFunds}
                   isDeletingUser={isDeletingUser}
                   isAddingFunds={isAddingFunds}
-                  isAddingUser={isAddingUser} // Pass isAddingUser to handle the loader state for add user
+                  isAddingUser={isAddingUser}
                 />
               )}
             </CardBody>
@@ -292,7 +306,6 @@ const SupplierDatabase = () => {
         </Col>
       </Row>
 
-      {/* Modal for adding new user */}
       <Modal isOpen={modalOpen} toggle={closeAddUserModal}>
         <ModalHeader toggle={closeAddUserModal}>Add New User</ModalHeader>
         <ModalBody>
@@ -327,6 +340,37 @@ const SupplierDatabase = () => {
               placeholder="Enter Password"
             />
           </div>
+          {/* Referral Code Search */}
+          <div>
+            <label>Search Referral Code</label>
+            <Input
+              type="text"
+              value={searchReferralCode}
+              onChange={handleReferralCodeSearch}
+              placeholder="Search Referral Code"
+            />
+            {filteredUsers.length > 0 && (
+              <div style={{ maxHeight: "150px", overflowY: "auto" }}>
+                <ul style={{ listStyle: "none", padding: 0 }}>
+                  {filteredUsers.map((user) => (
+                    <li
+                      key={user.id}
+                      style={{
+                        cursor: "pointer",
+                        padding: "5px",
+                        backgroundColor: "#f1f1f1",
+                        marginBottom: "5px",
+                      }}
+                      onClick={() => handleSelectUser(user)}
+                    >
+                     {user.name} {user.email} {user.referralCode}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          {/* Referral Code (disabled once a user is selected) */}
           <div>
             <label>Referral Code</label>
             <Input
@@ -336,6 +380,7 @@ const SupplierDatabase = () => {
                 setNewUser({ ...newUser, referralCode: e.target.value })
               }
               placeholder="Enter Referral Code"
+              disabled={selectedUser !== null}
             />
           </div>
           <div>
