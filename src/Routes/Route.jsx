@@ -10,7 +10,8 @@ import GenerateVoucher from "../Pages/Payouts/GenerateVoucher/GenerateVoucher";
 import VoucherPayment from "../Pages/Payouts/VoucherPayment/VoucherPayment";
 import TicketList from "../Pages/Settings/ManageTickets/Tickets";
 import News from "../Pages/Settings/MemberNews/News";
-import Rank from "../Pages/Settings/Rank/RANK.JSX";
+import Rank from "../Pages/Settings/Rank/Rank";
+
 import BalanceReport from "../Pages/Wallet/BalanceReport/BalanceReport";
 import AddFund from "../Pages/Wallet/FundAdd/AddFund";
 import WalletPaid from "../Pages/Wallet/WalletPaid/WalletPaid";
