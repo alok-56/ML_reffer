@@ -3,6 +3,7 @@ import Transaction from "../Pages/Bussiness/Transaction";
 import Home from "../Pages/Home/Home";
 import LivelWiseTeam from "../Pages/Member/LevelWiseTeam/LivelWiseTeam";
 import ManageMember from "../Pages/Member/Managemember/Managemember";
+import SponserScreen from "../Pages/Member/SponosorTeam/SponserScreen";
 import Withdrawals from "../Pages/Member/Withdrawals/Withdrawals";
 import CommisionDetails from "../Pages/Payouts/CommisionDetails/CommisionDetails";
 import MonthlyExcepted from "../Pages/Payouts/ExceptedMonthly/MonthlyExcepted";
@@ -133,6 +134,12 @@ const AppRoute = [
     name: "Member withdrawal",
     Component: Withdrawals,
     route: "/member/withdraw",
+    private: true,
+  },
+  {
+    name: "Member Sponsser",
+    Component: SponserScreen,
+    route: "/member/SponserTeam",
     private: true,
   },
 ];
