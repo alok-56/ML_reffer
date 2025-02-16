@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import {
   FaHome,
@@ -10,13 +10,20 @@ import {
   FaListAlt,
   FaSchool,
   FaCogs,
+  FaWallet,
+  FaUsersCog,
+  FaNewspaper,
+  FaRegFileAlt,
+  FaDollarSign,
+  FaMoneyBill,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import logo from "../../Assests/logo.png";
+import Cookies from "js-cookie";
 
 const SidebarDash = () => {
   const location = useLocation();
   const [activeMenuItem, setActiveMenuItem] = useState(location.pathname);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     setActiveMenuItem(location.pathname);
@@ -55,6 +62,101 @@ const SidebarDash = () => {
     backgroundColor: "rgba(67, 24, 255, 0.1)",
   };
 
+  const handlelogout = () => {
+    Cookies.remove("token");
+    navigate("/login");
+  };
+
+  const getIcon = (path) => {
+    switch (path) {
+      case "/":
+        return <FaHome style={iconStyle} />;
+      case "/transaction":
+        return <FaDollarSign style={iconStyle} />;
+      case "/setting/bank":
+        return <FaWallet style={iconStyle} />;
+      case "/setting/news":
+        return <FaNewspaper style={iconStyle} />;
+      case "/setting/ranks":
+        return <FaUsersCog style={iconStyle} />;
+      case "/setting/ticket":
+        return <FaRegFileAlt style={iconStyle} />;
+      case "/wallet/addfund":
+        return <FaPlus style={iconStyle} />;
+      case "/wallet/balancereport":
+        return <FaListAlt style={iconStyle} />;
+      case "/wallet/balance":
+        return <FaDollarSign style={iconStyle} />;
+      case "/wallet/transaction":
+        return <FaMoneyBill style={iconStyle} />;
+      case "/wallet/paid":
+        return <FaWallet style={iconStyle} />;
+      case "/wallet/transfer":
+        return <FaRegFileAlt style={iconStyle} />;
+      case "/wallet/prinicipal/wallet":
+        return <FaListAlt style={iconStyle} />;
+      case "/Payout/commision/details":
+        return <FaListAlt style={iconStyle} />;
+      case "/Payout/Excepted/monthly/income":
+        return <FaPlus style={iconStyle} />;
+      case "/Payout/voucher/list":
+        return <FaListAlt style={iconStyle} />;
+      case "/Payout/voucher/generate":
+        return <FaPlus style={iconStyle} />;
+      case "/member/managemember":
+        return <FaPeopleArrows style={iconStyle} />;
+      case "/member/SponserTeam":
+        return <FaPeopleArrows style={iconStyle} />;
+      case "/member/LevelWiseTeam":
+        return <FaPeopleArrows style={iconStyle} />;
+      default:
+        return <FaHome style={iconStyle} />;
+    }
+  };
+
+  const getSubMenuIcon = (path) => {
+    switch (path) {
+      case "/setting/bank":
+        return <FaWallet style={iconStyle} />;
+      case "/setting/news":
+        return <FaNewspaper style={iconStyle} />;
+      case "/setting/ranks":
+        return <FaUsersCog style={iconStyle} />;
+      case "/setting/ticket":
+        return <FaRegFileAlt style={iconStyle} />;
+      case "/wallet/addfund":
+        return <FaPlus style={iconStyle} />;
+      case "/wallet/balancereport":
+        return <FaListAlt style={iconStyle} />;
+      case "/wallet/transaction":
+        return <FaShoppingCart style={iconStyle} />;
+      case "/wallet/balance":
+        return <FaShoppingCart style={iconStyle} />;
+      case "/wallet/paid":
+        return <FaWallet style={iconStyle} />;
+      case "/wallet/transfer":
+        return <FaRegFileAlt style={iconStyle} />;
+      case "/wallet/prinicipal/wallet":
+        return <FaListAlt style={iconStyle} />;
+      case "/Payout/commision/details":
+        return <FaListAlt style={iconStyle} />;
+      case "/Payout/Excepted/monthly/income":
+        return <FaPlus style={iconStyle} />;
+      case "/Payout/voucher/list":
+        return <FaListAlt style={iconStyle} />;
+      case "/Payout/voucher/generate":
+        return <FaPlus style={iconStyle} />;
+      case "/member/managemember":
+        return <FaPeopleArrows style={iconStyle} />;
+      case "/member/SponserTeam":
+        return <FaPeopleArrows style={iconStyle} />;
+      case "/member/LevelWiseTeam":
+        return <FaPeopleArrows style={iconStyle} />;
+      default:
+        return <FaHome style={iconStyle} />;
+    }
+  };
+
   return (
     <div>
       <Sidebar
@@ -77,21 +179,13 @@ const SidebarDash = () => {
               boxShadow: "0px 1px  rgba(81, 80, 80, 0.2)",
             }}
           >
-            {/* <img style={{ height: 60, width: 120 }} src={logo} alt="Logo" /> */}
             <h3>Demo</h3>
           </div>
 
-          {/* Dashboard Menu Item */}
+          {/* Dashboard */}
           <MenuItem
             component={<Link to="/" />}
-            icon={
-              <FaHome
-                style={{
-                  color: activeMenuItem === "/" ? "#0C7FDA" : "#5D7285",
-                  fontSize: 24,
-                }}
-              />
-            }
+            icon={getIcon("/")}
             className={activeMenuItem === "/" ? "active" : ""}
             style={{
               ...commonStyles,
@@ -101,98 +195,364 @@ const SidebarDash = () => {
             Dashboard
           </MenuItem>
 
-          {/* Supplier SubMenu */}
+          {/* Transaction */}
+          <MenuItem
+            component={<Link to="/transaction" />}
+            icon={getIcon("/transaction")}
+            className={activeMenuItem === "/transaction" ? "active" : ""}
+            style={{
+              ...commonStyles,
+              ...(activeMenuItem === "/transaction" ? activeStyles : {}),
+            }}
+          >
+            Bussiness
+          </MenuItem>
+
+          {/* Settings */}
           <SubMenu
-            label="DEMO"
-            icon={
-              <FaPeopleArrows
-                style={{
-                  color:
-                    activeMenuItem === "/supplier/database" ||
-                    activeMenuItem === "/supplier/downline"
-                      ? "#0C7FDA"
-                      : "#5D7285",
-                  fontSize: 24,
-                }}
-              />
-            }
+            label="Settings"
+            icon={getSubMenuIcon("/setting/bank")}
             className={
-              activeMenuItem === "/supplier/database" ||
-              activeMenuItem === "/supplier/downline"
+              activeMenuItem === "/setting/bank" ||
+              activeMenuItem === "/setting/news" ||
+              activeMenuItem === "/setting/ranks" ||
+              activeMenuItem === "/setting/ticket"
                 ? "active"
                 : ""
             }
             style={{
               ...commonStyles,
-              ...(activeMenuItem === "/supplier/database" ||
-              activeMenuItem === "/supplier/downline"
+              ...(activeMenuItem === "/setting/bank" ||
+              activeMenuItem === "/setting/news" ||
+              activeMenuItem === "/setting/ranks" ||
+              activeMenuItem === "/setting/ticket"
                 ? activeSubMenuStyles
                 : {}),
             }}
           >
-            {/* Supplier Database Menu Item */}
             <MenuItem
-              component={<Link to="/supplier/database" />}
-              icon={
-                <FaListAlt
-                  style={{
-                    color:
-                      activeMenuItem === "/supplier/database"
-                        ? "#0C7FDA"
-                        : "#5D7285",
-                    fontSize: 24,
-                  }}
-                />
-              }
-              className={
-                activeMenuItem === "/supplier/database" ? "active" : ""
-              }
+              component={<Link to="/setting/news" />}
+              icon={getIcon("/setting/news")}
+              className={activeMenuItem === "/setting/news" ? "active" : ""}
               style={{
                 fontSize: 14,
                 ...subMenuStyles,
-                ...(activeMenuItem === "/supplier/database"
-                  ? activeStyles
-                  : {}),
+                ...(activeMenuItem === "/setting/news" ? activeStyles : {}),
               }}
             >
-              Users
+              News
             </MenuItem>
             <MenuItem
-              component={<Link to="/supplier/downline" />}
-              icon={
-                <FaListAlt
-                  style={{
-                    color:
-                      activeMenuItem === "/supplier/downline"
-                        ? "#0C7FDA"
-                        : "#5D7285",
-                    fontSize: 24,
-                  }}
-                />
-              }
+              component={<Link to="/setting/ranks" />}
+              icon={getIcon("/setting/ranks")}
+              className={activeMenuItem === "/setting/ranks" ? "active" : ""}
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/setting/ranks" ? activeStyles : {}),
+              }}
+            >
+              Ranks
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/setting/ticket" />}
+              icon={getIcon("/setting/ticket")}
+              className={activeMenuItem === "/setting/ticket" ? "active" : ""}
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/setting/ticket" ? activeStyles : {}),
+              }}
+            >
+              Manage Tickets
+            </MenuItem>
+          </SubMenu>
+          {/* Member */}
+          <SubMenu
+            label="Member"
+            icon={getSubMenuIcon("/member/managemember")}
+            className={
+              activeMenuItem === "/member/managemember" ||
+              activeMenuItem === "/member/SponserTeam" ||
+              activeMenuItem === "/member/LevelWiseTeam" ||
+              activeMenuItem === "/member/LevelWiseTeam"
+                ? "active"
+                : ""
+            }
+            style={{
+              ...commonStyles,
+              ...(activeMenuItem === "/member/managemember" ||
+              activeMenuItem === "/member/SponserTeam" ||
+              activeMenuItem === "/member/LevelWiseTeam"
+                ? activeSubMenuStyles
+                : {}),
+            }}
+          >
+            <MenuItem
+              component={<Link to="/member/managemember" />}
+              icon={getIcon("/member/managemember")}
               className={
-                activeMenuItem === "/supplier/downline" ? "active" : ""
+                activeMenuItem === "/member/managemember" ? "active" : ""
               }
               style={{
                 fontSize: 14,
                 ...subMenuStyles,
-                ...(activeMenuItem === "/supplier/downline"
+                ...(activeMenuItem === "/member/managemember"
                   ? activeStyles
                   : {}),
               }}
             >
-              Downline
+              Manage Member
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/member/SponserTeam" />}
+              icon={getIcon("/member/SponserTeam")}
+              className={
+                activeMenuItem === "/member/SponserTeam" ? "active" : ""
+              }
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/member/SponserTeam"
+                  ? activeStyles
+                  : {}),
+              }}
+            >
+              Sponser Team
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/member/LevelWiseTeam" />}
+              icon={getIcon("/member/LevelWiseTeam")}
+              className={
+                activeMenuItem === "/member/LevelWiseTeam" ? "active" : ""
+              }
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/member/LevelWiseTeam"
+                  ? activeStyles
+                  : {}),
+              }}
+            >
+              Level Wise Team
+            </MenuItem>
+
+            <MenuItem
+              component={<Link to="/member/withdraw" />}
+              icon={getIcon("/wallet/transaction")}
+              className={activeMenuItem === "/member/withdraw" ? "active" : ""}
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/member/withdraw" ? activeStyles : {}),
+              }}
+            >
+              Withdwral request
             </MenuItem>
           </SubMenu>
 
-          {/* Logout Menu Item */}
+          {/* Wallet */}
+          <SubMenu
+            label="Wallet"
+            icon={getSubMenuIcon("/wallet/transaction")}
+            className={
+              activeMenuItem === "/wallet/transaction" ||
+              activeMenuItem === "/wallet/paid" ||
+              activeMenuItem === "/wallet/transfer" ||
+              activeMenuItem === "/wallet/prinicipal/wallet"
+                ? "active"
+                : ""
+            }
+            style={{
+              ...commonStyles,
+              ...(activeMenuItem === "/wallet/transaction" ||
+              activeMenuItem === "/wallet/paid" ||
+              activeMenuItem === "/wallet/transfer" ||
+              activeMenuItem === "/wallet/prinicipal/wallet"
+                ? activeSubMenuStyles
+                : {}),
+            }}
+          >
+            <MenuItem
+              component={<Link to="/wallet/addfund" />}
+              icon={getIcon("/wallet/balance")}
+              className={activeMenuItem === "/wallet/addfund" ? "active" : ""}
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/wallet/addfund" ? activeStyles : {}),
+              }}
+            >
+              Add/Deduct Fund
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/wallet/balance" />}
+              icon={getIcon("/wallet/balance")}
+              className={activeMenuItem === "/wallet/balance" ? "active" : ""}
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/wallet/balance" ? activeStyles : {}),
+              }}
+            >
+              Balance
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/wallet/transaction" />}
+              icon={getIcon("/wallet/transaction")}
+              className={
+                activeMenuItem === "/wallet/transaction" ? "active" : ""
+              }
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/wallet/transaction"
+                  ? activeStyles
+                  : {}),
+              }}
+            >
+              Wallet Transaction
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/wallet/paid" />}
+              icon={getIcon("/wallet/paid")}
+              className={activeMenuItem === "/wallet/paid" ? "active" : ""}
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/wallet/paid" ? activeStyles : {}),
+              }}
+            >
+              Due Wallet
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/wallet/transfer" />}
+              icon={getIcon("/wallet/transfer")}
+              className={activeMenuItem === "/wallet/transfer" ? "active" : ""}
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/wallet/transfer" ? activeStyles : {}),
+              }}
+            >
+              Transferd Wallet
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/wallet/prinicipal/wallet" />}
+              icon={getIcon("/wallet/prinicipal/wallet")}
+              className={
+                activeMenuItem === "/wallet/prinicipal/wallet" ? "active" : ""
+              }
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/wallet/prinicipal/wallet"
+                  ? activeStyles
+                  : {}),
+              }}
+            >
+              Principal Wallet
+            </MenuItem>
+          </SubMenu>
+
+          {/* Payout */}
+          <SubMenu
+            label="Payout"
+            icon={getSubMenuIcon("/Payout/commision/details")}
+            className={
+              activeMenuItem === "/Payout/commision/details" ||
+              activeMenuItem === "/Payout/Excepted/monthly/income" ||
+              activeMenuItem === "/Payout/voucher/list" ||
+              activeMenuItem === "/Payout/voucher/generate"
+                ? "active"
+                : ""
+            }
+            style={{
+              ...commonStyles,
+              ...(activeMenuItem === "/Payout/commision/details" ||
+              activeMenuItem === "/Payout/Excepted/monthly/income" ||
+              activeMenuItem === "/Payout/voucher/list" ||
+              activeMenuItem === "/Payout/voucher/generate"
+                ? activeSubMenuStyles
+                : {}),
+            }}
+          >
+            <MenuItem
+              component={<Link to="/Payout/commision/details" />}
+              icon={getIcon("/Payout/commision/details")}
+              className={
+                activeMenuItem === "/Payout/commision/details" ? "active" : ""
+              }
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/Payout/commision/details"
+                  ? activeStyles
+                  : {}),
+              }}
+            >
+              Commission Details
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/Payout/Excepted/monthly/income" />}
+              icon={getIcon("/Payout/Excepted/monthly/income")}
+              className={
+                activeMenuItem === "/Payout/Excepted/monthly/income"
+                  ? "active"
+                  : ""
+              }
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/Payout/Excepted/monthly/income"
+                  ? activeStyles
+                  : {}),
+              }}
+            >
+              Expected Monthly Income
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/Payout/voucher/list" />}
+              icon={getIcon("/Payout/voucher/list")}
+              className={
+                activeMenuItem === "/Payout/voucher/list" ? "active" : ""
+              }
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/Payout/voucher/list"
+                  ? activeStyles
+                  : {}),
+              }}
+            >
+              Voucher List
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/Payout/voucher/generate" />}
+              icon={getIcon("/Payout/voucher/generate")}
+              className={
+                activeMenuItem === "/Payout/voucher/generate" ? "active" : ""
+              }
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/Payout/voucher/generate"
+                  ? activeStyles
+                  : {}),
+              }}
+            >
+              Generate Voucher
+            </MenuItem>
+          </SubMenu>
+
+          {/* Logout */}
           <div
             style={{
               position: "absolute",
               bottom: 80,
               left: 45,
             }}
-            onClick={() => localStorage.clear()}
+            onClick={() => handlelogout()}
           >
             <MenuItem
               icon={

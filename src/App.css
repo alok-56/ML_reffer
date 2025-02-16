@@ -10,7 +10,7 @@
   top: 0;
   left: 0;
   background-color: #f4f4f4;
-  padding-top: 20px;
+  padding-top: 0px;
   z-index: 1;
 }
 .content-area {
@@ -20,4 +20,14 @@
   height: 100vh;
   overflow-y: auto;
   margin-top: 80px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+  .content-area {
+    width: 100%;
+    margin-left: 0px;
+  }
 }

@@ -1,36 +1,19 @@
-/* Skeleton card styles */
-.skeleton-card {
-    background-color: #cccbcb;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 2px rgba(0, 123, 255, 0.3); 
-    transition: box-shadow 0.3s ease; 
-    border: none;
-    border-color: #fff;
-  }
-  
+.info-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
 
-  .skeleton-content {
-    background-color: #e0e0e0;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    animation: pulse 1.5s infinite ease-in-out;
-  }
-  
-  @keyframes pulse {
-    0% {
-      opacity: 0.8;
-    }
-    50% {
-      opacity: 0.4;
-    }
-    100% {
-      opacity: 0.8;
-    }
-  }
-  
-  .skeleton-card:hover {
-    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4); 
-  }
-  
+.info-card .card-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.info-card .card-text {
+  font-size: 24px;
+  color: #28a745;
+}
+
+
+
