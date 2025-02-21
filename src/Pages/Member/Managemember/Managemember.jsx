@@ -9,6 +9,8 @@ import {
   ModalBody,
   ModalFooter,
   Input,
+  Label,
+  FormGroup,
 } from "reactstrap";
 import {
   useTable,
@@ -30,6 +32,8 @@ import {
   GetAllMember,
   UpdateNewMemberApi,
 } from "../../../Api/Member";
+import Select from "react-select";
+import { GetAllUsers } from "../../../Api/Auth";
 
 const ManageMember = () => {
   const [responseData, setResponseData] = useState([]);
@@ -39,13 +43,20 @@ const ManageMember = () => {
   const [pageSize, setPageSize] = useState(10);
   const [apiloader, setApiloader] = useState(false);
   const [loading, setLoading] = useState(true);
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [referralCode, setReferralCode] = useState("");
   const [rank, setRank] = useState("");
   const [publicKey, setPublicKey] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [users, setUsers] = useState([]);
+
+  console.log(selectedUser)
+
+  useEffect(() => {
+    FetchUsers();
+  }, []);
 
   useEffect(() => {
     fetchMemberData();
@@ -195,7 +206,6 @@ const ManageMember = () => {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
-    const trimmedReferralCode = referralCode.trim();
     const trimmedRank = rank;
     const trimmedPublicKey = publicKey.trim();
 
@@ -204,7 +214,7 @@ const ManageMember = () => {
       !trimmedName ||
       !trimmedEmail ||
       !trimmedPassword ||
-      !trimmedReferralCode ||
+      !selectedUser ||
       !trimmedRank ||
       !trimmedPublicKey
     ) {
@@ -240,7 +250,7 @@ const ManageMember = () => {
         Name: trimmedName,
         Email: trimmedEmail,
         Password: trimmedPassword,
-        referralCode: trimmedReferralCode,
+        referralCode: selectedUser?.referralCode,
         Rank: trimmedRank,
         PublicKey: trimmedPublicKey,
       });
@@ -259,6 +269,7 @@ const ManageMember = () => {
         setReferralCode("");
         setRank("");
         setPublicKey("");
+        setSelectedUser(null)
 
         fetchMemberData();
       } else {
@@ -378,6 +389,29 @@ const ManageMember = () => {
         setApiloader(false);
       }
     });
+  };
+
+  const FetchUsers = async () => {
+    try {
+      let res = await GetAllUsers();
+      if (res.status) {
+        let newdata = res.data.map((item) => ({
+          value: item?._id,
+          label: `${item?.Name} - ${item?.referralCode || "N/A"}`,
+          referralCode: item?.referralCode,
+        }));
+        setUsers(newdata);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  const filterOption = (inputValue, option) => {
+    return (
+      inputValue.data.label.includes(option) ||
+      inputValue.data.referralCode.includes(option)
+    );
   };
 
   return (
@@ -600,13 +634,29 @@ const ManageMember = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter Password here"
           />
-          <Input
-            className="mt-2"
-            type="text"
-            value={referralCode}
-            onChange={(e) => setReferralCode(e.target.value)}
-            placeholder="Enter Referral Code here"
-          />
+          <FormGroup>
+            <Label className="fw-bold">
+              Select User (Search by Name or Code)
+            </Label>
+            <Select
+              options={users}
+              value={selectedUser}
+              onChange={(option) => setSelectedUser(option)}
+              placeholder="Search by name or code..."
+              className="fs-10"
+              filterOption={filterOption}
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  padding: "10px",
+                  borderRadius: "5px",
+                  fontSize: "1rem",
+                  width: "100%",
+                }),
+              }}
+            />
+          </FormGroup>
+
           <Input
             className="mt-2"
             type="number"
