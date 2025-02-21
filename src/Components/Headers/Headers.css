@@ -46,7 +46,7 @@
   font-size: 24px;
   font-weight: bold;
   text-align: center;
- 
+  display: none;
 }
 
 .profile-container {
@@ -55,10 +55,14 @@
 }
 
 .profile-icon {
-  height: 40px; /* Set the height of the profile image */
-  width: 40px; /* Set the width to match the height */
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
-  object-fit: cover; /* Ensures the image doesn't stretch or get distorted */
+  object-fit: cover;
+}
+
+.custom-offcanvas {
+  width: 100px !important;
 }
 
 /* Responsive Styles */
@@ -73,6 +77,7 @@
 
   .app-name {
     font-size: 20px;
+    display: block;
   }
 
   .profile-container {
@@ -87,10 +92,10 @@
 
 @media (max-width: 480px) {
   .app-header {
-    padding: 0 10px
+    padding: 0 10px;
   }
 
-  .menu-container{
+  .menu-container {
     display: block;
   }
 
@@ -99,7 +104,7 @@
     width: 30px;
   }
 
-  .app-name{
+  .app-name {
     flex-grow: 1;
   }
 }

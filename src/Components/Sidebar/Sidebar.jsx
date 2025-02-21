@@ -19,6 +19,7 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import logo1 from "../../Assests/logo.png";
 
 const SidebarDash = () => {
   const location = useLocation();
@@ -179,7 +180,7 @@ const SidebarDash = () => {
               boxShadow: "0px 1px  rgba(81, 80, 80, 0.2)",
             }}
           >
-            <h3>Demo</h3>
+           <img style={{ height: 150, width: 150 }} src={logo1}></img>
           </div>
 
           {/* Dashboard */}
@@ -548,9 +549,9 @@ const SidebarDash = () => {
           {/* Logout */}
           <div
             style={{
-              position: "absolute",
-              bottom: 80,
-              left: 45,
+              width:"80%",
+              marginTop:100,
+            marginLeft:25
             }}
             onClick={() => handlelogout()}
           >

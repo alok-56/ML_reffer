@@ -63,40 +63,59 @@ export const UpdateNewMemberApi = async (payload, id) => {
   }
 };
 
-
 export const DeleteMemberApi = async (id) => {
-    let token = Cookies.get("token");
-    try {
-      let response = await fetch(`${BaseUrl}/admin/blockuser/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-          token: token,
-        },
-      });
-  
-      response = await response.json();
-      return response;
-    } catch (error) {
-      return error.message;
-    }
-  };
+  let token = Cookies.get("token");
+  try {
+    let response = await fetch(`${BaseUrl}/admin/blockuser/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+        token: token,
+      },
+    });
 
+    response = await response.json();
+    return response;
+  } catch (error) {
+    return error.message;
+  }
+};
 
-  export const DownlineTree=async(id)=>{
-    let token = Cookies.get("token");
-    try {
-      let response = await fetch(`${BaseUrl}/admin/downline/tree/${id}`, {
+export const DownlineTree = async (id) => {
+  let token = Cookies.get("token");
+  try {
+    let response = await fetch(`${BaseUrl}/admin/downline/tree/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: token,
+      },
+    });
+
+    response = await response.json();
+    return response;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+export const SponserTeam = async (code, start, end) => {
+  let token = Cookies.get("token");
+  try {
+    let response = await fetch(
+      `${BaseUrl}/admin/users/sponserteam?referralCode=${code}&startDate=${start}&endDate=${end}`,
+      {
         method: "GET",
         headers: {
           "Content-type": "application/json",
           token: token,
         },
-      });
-  
-      response = await response.json();
-      return response;
-    } catch (error) {
-      return error.message;
-    }
+      }
+    );
+
+    response = await response.json();
+    return response;
+  } catch (error) {
+    return error.message;
   }
+};

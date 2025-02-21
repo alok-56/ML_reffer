@@ -1,30 +1,30 @@
 import React, { useState } from "react";
 import "./Headers.css";
 import logo from "../../Assests/avatar.png";
+import logo1 from "../../Assests/logo.png";
 import { FaBell, FaSearch, FaBars } from "react-icons/fa";
+import { Offcanvas } from "reactstrap";
+import SidebarDash from "../Sidebar/Sidebar";
+import { useNavigate } from "react-router-dom";
 
 const Headers = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-
   const toggleMenu = () => setMenuOpen(!menuOpen);
+  const navigate=useNavigate()
 
   return (
     <header className="app-header">
-      {/* Left side: Menu toggle for small screens */}
       <div className="menu-container">
-        {/* Show menu only on small screens */}
         <div className="menu-icon" onClick={toggleMenu}>
           <FaBars size={24} />
         </div>
       </div>
 
-      {/* Center: App Name */}
-      <div className="app-name">The Reactors</div>
+      <div className="app-name">
+        <img style={{ height: 150, width: 150 }} src={logo1} alt="App Logo" />
+      </div>
 
-     
-
-      {/* Right side: Profile Icon */}
-      <div className="profile-container">
+      <div className="profile-container" onClick={()=>navigate('/profile')}>
         <img
           className="profile-icon"
           src={logo}
@@ -32,9 +32,10 @@ const Headers = () => {
         />
       </div>
 
-      {/* Optional menu content */}
-      <div className={`side-menu ${menuOpen ? "open" : ""}`}>
-        {/* Your menu content goes here */}
+      <div>
+        <Offcanvas isOpen={menuOpen} toggle={toggleMenu} className="custom-offcanvas">
+          <SidebarDash />
+        </Offcanvas>
       </div>
     </header>
   );

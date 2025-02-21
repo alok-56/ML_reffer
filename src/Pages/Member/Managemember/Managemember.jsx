@@ -281,7 +281,7 @@ const ManageMember = () => {
   };
 
   const handleEditMember = async () => {
-    // Trim values to remove accidental spaces
+
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
@@ -289,7 +289,6 @@ const ManageMember = () => {
     const trimmedRank = rank;
     const trimmedPublicKey = publicKey.trim();
 
-    // Basic Validations
     if (
       !trimmedName ||
       !trimmedEmail ||

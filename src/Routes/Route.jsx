@@ -9,6 +9,7 @@ import CommisionDetails from "../Pages/Payouts/CommisionDetails/CommisionDetails
 import MonthlyExcepted from "../Pages/Payouts/ExceptedMonthly/MonthlyExcepted";
 import GenerateVoucher from "../Pages/Payouts/GenerateVoucher/GenerateVoucher";
 import VoucherPayment from "../Pages/Payouts/VoucherPayment/VoucherPayment";
+import Profile from "../Pages/Profile";
 import TicketList from "../Pages/Settings/ManageTickets/Tickets";
 import News from "../Pages/Settings/MemberNews/News";
 import Rank from "../Pages/Settings/Rank/Rank";
@@ -140,6 +141,12 @@ const AppRoute = [
     name: "Member Sponsser",
     Component: SponserScreen,
     route: "/member/SponserTeam",
+    private: true,
+  },
+  {
+    name: "Profile",
+    Component: Profile,
+    route: "/profile",
     private: true,
   },
 ];

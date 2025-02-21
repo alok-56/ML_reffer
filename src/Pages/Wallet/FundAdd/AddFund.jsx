@@ -44,8 +44,7 @@ const AddFund = () => {
   };
 
   const options = [
-    { value: "ADD", label: "ADD FUND" },
-    { value: "DEDUCT", label: "DEDUCT FUND" },
+    { value: "ADD", label: "ADD FUND" }
   ];
 
   const filterOption = (inputValue, option) => {
@@ -73,7 +72,7 @@ const AddFund = () => {
         amount: amount,
         UserId: selectedUser.value
       });
-      
+
       if (res.status) {
         Swal.fire("SUCCESS!", "Fund Updated Successfully", "success");
         setAmount("");
@@ -83,11 +82,11 @@ const AddFund = () => {
         Swal.fire("ERROR!", res.message, "error");
       }
     } catch (error) {
-        Swal.fire("ERROR!", error.message, "error");
+      Swal.fire("ERROR!", error.message, "error");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
 
   return (
@@ -159,7 +158,7 @@ const AddFund = () => {
               {/* Submit Button */}
               <div className="text-center">
                 <Button
-                onClick={HandleSubmit}
+                  onClick={HandleSubmit}
                   color="primary"
                   className="mt-3 w-100 fs-5 py-2 shadow-sm"
                 >

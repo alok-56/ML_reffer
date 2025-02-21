@@ -13,7 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -23,6 +23,7 @@ const Login = () => {
       let res = await LoginApi(credentials);
       if (res.status) {
         Cookies.set("token", res.token, { expires: 5 / 24 });
+        Cookies.set("data", JSON.stringify(res.data), { expires: 5 / 24 });
         Swal.fire({
           title: "Success!",
           text: "Login successfully..",
@@ -38,7 +39,7 @@ const Login = () => {
       }
     } catch (error) {
       setError(error.message);
-    } finally{
+    } finally {
       setLoading(false)
     }
   };
@@ -58,7 +59,7 @@ const Login = () => {
           </Col>
           <Col xs={12} md={6} className="login-form-container text-center">
             <Col xs={12} className="text-center">
-              <h3>Company Logo</h3>
+              <img style={{ height: 150, width: 250 }} src={logo}></img>
             </Col>
             <h1 className="login-header">Login</h1>
             <p className="login-description">Login to access your account</p>

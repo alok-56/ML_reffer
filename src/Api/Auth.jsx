@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 // Login Api
 export const LoginApi = async (payload) => {
-    console.log(payload)
+  console.log(payload)
   try {
     let response = await fetch(`${BaseUrl}/admin/signin`, {
       method: "POST",
@@ -30,6 +30,27 @@ export const GetAllUsers = async () => {
       headers: {
         "Content-type": "application/json",
         token: token,
+      },
+    });
+
+    response = await response.json();
+    return response;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+// change password
+
+export const ChangepasswordApi = async (payload) => {
+  let token = Cookies.get("token");
+  try {
+    let response = await fetch(`${BaseUrl}/admin/admin/changepassword`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-type": "application/json",
+        "token": token
       },
     });
 
