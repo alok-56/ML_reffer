@@ -261,7 +261,6 @@ const ManageMember = () => {
           text: "Member created successfully.",
           icon: "success",
         });
-
         setModalOpen(false);
         setName("");
         setEmail("");
@@ -270,8 +269,8 @@ const ManageMember = () => {
         setRank("");
         setPublicKey("");
         setSelectedUser(null)
-
         fetchMemberData();
+        FetchUsers()
       } else {
         Swal.fire({
           title: "Error!",
@@ -377,6 +376,7 @@ const ManageMember = () => {
           if (res.status) {
             Swal.fire("Deleted!", "Member has been deleted.", "success");
             fetchMemberData();
+            FetchUsers()
           } else {
             Swal.fire("ERROR!", res.message, "error");
           }
