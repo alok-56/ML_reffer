@@ -183,9 +183,14 @@ const ManageMember = () => {
     const fileExtension = ".xlsx";
     const formattedData = responseData.map((item, index) => ({
       "SL NO": index + 1,
-      RANK: item.Member,
-      COMMISION: item.Commision,
-      ACTIVE: item.Active,
+    "USER NAME": item.Name,
+    EMAIL: item.Email,
+    PASSWORD: item.Password,
+    "MEMBER ID": item.referralCode,
+    RANK: item.Rank,
+    "SPONSER ID": item.referredBy,
+    "JOIN DATE": item.createdAt,
+    ACTIVE: item.Active,
     }));
 
     const ws = XLSX.utils.json_to_sheet(formattedData);

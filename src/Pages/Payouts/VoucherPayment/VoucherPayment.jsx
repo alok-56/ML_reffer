@@ -89,7 +89,13 @@ const VoucherPayment = () => {
         Header: "DATE",
         accessor: "createdAt",
       },
-      { Header: "STATUS", accessor: "status" },
+      {
+        Header: "STATUS",
+        accessor: "status",
+        Cell: ({ value }) => {
+          return "Due"
+        },
+      },
       {
         Header: "ACTION",
         Cell: ({ row }) => (
@@ -155,11 +161,11 @@ const VoucherPayment = () => {
     MONTH: monthNames[item?.month - 1] || "NA",
     YEAR: item?.Year || "NA",
     AMOUNT: item?.amount || "NA",
-    STATUS: item?.status || "NA",
+    STATUS: "Due" || "NA",
   }));
 
   const exportToExcel = () => {
-    const sheetName = "Excepted_Earning_report";
+    const sheetName = "Voucher_report";
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileExtension = ".xlsx";

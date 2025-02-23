@@ -101,7 +101,8 @@ const CommisionDetails = () => {
         accessor: "month",
         Cell: ({ value }) => monthNames[value - 1] || "NA",
       },
-
+      { Header: "DEPOSIT BY", accessor: "depositby.Name" },
+      { Header: "DEPOSIT CODE", accessor: "depositby.referralCode" },
       { Header: "DEPOSIT", accessor: "amount" },
       { Header: "COMMISION", accessor: "commision" },
       {
@@ -148,24 +149,29 @@ const CommisionDetails = () => {
     "SL NO": index + 1,
     "USER NAME": item?.UserId?.Name || "NA",
     "MEMBER ID": item?.UserId?.referralCode || "NA",
-    EMAIL: item?.UserId?.Email || "NA",
-    BALANCE: item?.UserId?.balance || "NA",
-    DATE: item?.createdAt || "NA",
     MONTH: monthNames[item?.month - 1] || "NA",
-    YEAR: item?.Year || "NA",
-    "PRINCIPAL AMOUNT": item?.amount || "NA",
-    STATUS: item?.status || "NA",
+    "RANK": item?.UserId?.Rank || "NA",
+    "SPONSER NAME": item?.Sponser?.Name || "NA",
+    "SPONSER ID": item?.Sponser?.referralCode || "NA",
+    "SPONSER RANK": item?.Sponser?.Rank || "NA",
+    "DEPOSIT BY": item?.depositby?.Name || "NA",
+    "DEPOSIT CODE": item?.depositby?.referralCode || "NA",
+    "DEPOSIT": item?.amount || "NA",
+    "COMMISION": item?.commision || "NA",
+    DATE: item?.createdAt || "NA",
   }));
+
+
 
   const exportToExcel = () => {
     const ws = XLSX.utils.json_to_sheet(formattedData);
-    const wb = { Sheets: { Wallet_Report: ws }, SheetNames: ["Wallet_Report"] };
+    const wb = { Sheets: { Wallet_Report: ws }, SheetNames: ["Commision_Report"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     saveAs(
       new Blob([excelBuffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
       }),
-      "Wallet_Transaction_Report.xlsx"
+      "Commision_Report.xlsx"
     );
   };
 
@@ -190,7 +196,7 @@ const CommisionDetails = () => {
         <Card>
           <CardHeader className="d-flex justify-content-between align-items-center">
             <h1 className="card-title" style={{ fontSize: "20px" }}>
-            COMMISION LIST
+              COMMISION LIST
             </h1>
             <div className="d-flex justify-content-end">
               <Button
