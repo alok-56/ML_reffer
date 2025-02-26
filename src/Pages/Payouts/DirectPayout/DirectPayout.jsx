@@ -37,6 +37,8 @@ const DirectPayout = () => {
     const [selectedUser, setSelectedUser] = useState("")
     const [modalOpen, setModalOpen] = useState(false);
     const [users, setUsers] = useState([]);
+    const [type, setType] = useState("")
+    const [publicurl, setPublicurl] = useState("")
 
     // Fetch Data from API
     const FetchTransaction = async () => {
@@ -184,6 +186,64 @@ const DirectPayout = () => {
         setFilteredData(filtered);
     };
 
+    const sendTransaction = async () => {
+        // Ensure MetaMask is available
+        if (!window.ethereum) {
+            Swal.fire('MetaMask not found!', 'Please install MetaMask.', 'warning');
+            return;
+        }
+
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (!accounts || accounts.length === 0) {
+            Swal.fire('MetaMask not connected!', 'Please connect your MetaMask wallet.', 'warning');
+            return;
+        }
+
+        const connectedAddress = accounts[0];
+
+        // Now proceed with the transaction
+        if (window.ethereum && connectedAddress) {
+            if (!amount) {
+                Swal.fire('Error!', `Amount is required`, 'error');
+                return;
+            }
+            if (!publicurl) {
+                Swal.fire('Error!', `Receiver Address is required`, 'error');
+                return;
+            }
+
+            if (publicurl === connectedAddress) {
+                Swal.fire('Error!', `Sender Address and receiver address are the same`, 'error');
+                return;
+            }
+            try {
+                const ethToUsdRate = 1500;
+                const ethAmount = amount / ethToUsdRate;
+                const value = (ethAmount?.toFixed(5) * Math.pow(10, 18)).toString(16);
+
+                const tx = {
+                    from: connectedAddress,
+                    to: publicurl,
+                    value: value,
+                    gasLimit: '0x5208',
+                    gasPrice: '0x5208',
+                };
+
+
+                const txHash = await window.ethereum.request({
+                    method: "eth_sendTransaction",
+                    params: [tx],
+                });
+
+                return true
+            } catch (error) {
+                console.log(error)
+                Swal.fire('Error!', `Transaction failed: ${error}`, 'error');
+                return false
+            }
+        }
+    };
+
     const HandleTranfer = async () => {
         if (!selectedUser) {
             Swal.fire("ERROR!", "User is required", "error");
@@ -203,29 +263,67 @@ const DirectPayout = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 setApiloader(true);
-                try {
-                    let res = await GenerateDirectPayoutApi({
-                        amount: amount,
-                        UserId: selectedUser.value
-                    });
-                    if (res.status) {
-                        Swal.fire(
-                            "Transfer Success!",
-                            "Money has been Transfered.",
-                            "success"
-                        );
-                        setSelectedUser("")
-                        setAmount("")
-                        setModalOpen(false)
-                        FetchTransaction();
-                    } else {
-                        Swal.fire("ERROR!", res.message, "error");
+                if (type === "cash") {
+                    try {
+                        let res = await GenerateDirectPayoutApi({
+                            amount: amount,
+                            UserId: selectedUser.value,
+                        });
+                        if (res.status) {
+                            Swal.fire(
+                                "Transfer Success!",
+                                "Money has been Transfered.",
+                                "success"
+                            );
+                            setSelectedUser("")
+                            setAmount("")
+                            setPublicurl("")
+                            setType("")
+                            setModalOpen(false)
+                            FetchTransaction();
+                        } else {
+                            Swal.fire("ERROR!", res.message, "error");
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    } finally {
+                        setApiloader(false);
                     }
-                } catch (error) {
-                    console.error(error);
-                } finally {
-                    setApiloader(false);
+                } else {
+                    let apiresponse = await sendTransaction()
+                    if (apiresponse) {
+                        try {
+                            let res = await GenerateDirectPayoutApi({
+                                amount: amount,
+                                UserId: selectedUser.value,
+                            });
+                            if (res.status) {
+                                Swal.fire(
+                                    "Transfer Success!",
+                                    "Money has been Transfered.",
+                                    "success"
+                                );
+                                setSelectedUser("")
+                                setAmount("")
+                                setPublicurl("")
+                                setType("")
+                                setModalOpen(false)
+                                FetchTransaction();
+                            } else {
+                                Swal.fire("ERROR!", res.message, "error");
+                            }
+                        } catch (error) {
+                            console.error(error);
+                        } finally {
+                            setApiloader(false);
+                        }
+                    } else {
+                        Swal.fire("ERROR!", "Transaction failed", "error");
+                        setApiloader(false);
+                    }
                 }
+
+
             } else {
                 setApiloader(false);
             }
@@ -240,6 +338,7 @@ const DirectPayout = () => {
                     value: item?._id,
                     label: `${item?.Name} - ${item?.referralCode || "N/A"}`,
                     referralCode: item?.referralCode,
+                    publicurl: item.PublicKey || publicurl
                 }));
                 setUsers(newdata);
             }
@@ -257,12 +356,12 @@ const DirectPayout = () => {
 
     const totalAmount = useMemo(() => {
         return page
-          .reduce(
-            (sum, { original }) => sum + (parseFloat(original.amount) || 0),
-            0
-          )
-          .toFixed(2);
-      }, [page]);
+            .reduce(
+                (sum, { original }) => sum + (parseFloat(original.amount) || 0),
+                0
+            )
+            .toFixed(2);
+    }, [page]);
 
     return (
         <React.Fragment>
@@ -441,10 +540,10 @@ const DirectPayout = () => {
                         )}
                     </div>
                     <div className="col-sm-6">
-            <p className="ps-2 font-weight-bold fs-3">
-              Total Amount: <span className="text-success">{totalAmount}</span>
-            </p>
-          </div>
+                        <p className="ps-2 font-weight-bold fs-3">
+                            Total Amount: <span className="text-success">{totalAmount}</span>
+                        </p>
+                    </div>
                     <div className="row">
                         <div className="col-sm-6">
                             {pageCount === 0 ? (
@@ -517,7 +616,10 @@ const DirectPayout = () => {
                         <Select
                             options={users}
                             value={selectedUser}
-                            onChange={(option) => setSelectedUser(option)}
+                            onChange={(option) => {
+                                setSelectedUser(option),
+                                    setPublicurl(option.publicurl)
+                            }}
                             placeholder="Search by name or code..."
                             className="fs-10"
                             filterOption={filterOption}
@@ -532,9 +634,31 @@ const DirectPayout = () => {
                             }}
                         />
                     </FormGroup>
+                    <div >
+                        <select
+                            className="form-select"
+                            value={type}
+                            onChange={(e) => setType(e.target.value)}
+                        >
+                            <option value="">Select Transaction Method</option>
+                            <option value="cash">By Cash</option>
+                            <option value="metamask">By Metamask</option>
+
+                        </select>
+                    </div>
+
+                    {
+                        type === "metamask" && <Input
+                            className="mt-3"
+                            type="textarea"
+                            value={publicurl}
+                            onChange={(e) => setPublicurl(e.target.value)}
+                            placeholder="Enter Metamask address"
+                        />
+                    }
 
                     <Input
-                        className="mt-2"
+                        className="mt-3"
                         type="number"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
