@@ -478,6 +478,22 @@ const SidebarDash = () => {
                 : {}),
             }}
           >
+          <MenuItem
+              component={<Link to="/direct/Payout" />}
+              icon={getIcon("/Payout/commision/details")}
+              className={
+                activeMenuItem === "/direct/Payout" ? "active" : ""
+              }
+              style={{
+                fontSize: 14,
+                ...subMenuStyles,
+                ...(activeMenuItem === "/direct/Payout"
+                  ? activeStyles
+                  : {}),
+              }}
+            >
+             Direct Payout
+            </MenuItem>
             <MenuItem
               component={<Link to="/Payout/commision/details" />}
               icon={getIcon("/Payout/commision/details")}

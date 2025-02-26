@@ -6,6 +6,7 @@ import ManageMember from "../Pages/Member/Managemember/Managemember";
 import SponserScreen from "../Pages/Member/SponosorTeam/SponserScreen";
 import Withdrawals from "../Pages/Member/Withdrawals/Withdrawals";
 import CommisionDetails from "../Pages/Payouts/CommisionDetails/CommisionDetails";
+import DirectPayout from "../Pages/Payouts/DirectPayout/DirectPayout";
 import MonthlyExcepted from "../Pages/Payouts/ExceptedMonthly/MonthlyExcepted";
 import GenerateVoucher from "../Pages/Payouts/GenerateVoucher/GenerateVoucher";
 import VoucherPayment from "../Pages/Payouts/VoucherPayment/VoucherPayment";
@@ -147,6 +148,12 @@ const AppRoute = [
     name: "Profile",
     Component: Profile,
     route: "/profile",
+    private: true,
+  },
+  {
+    name: "Direct payout",
+    Component: DirectPayout,
+    route: "/direct/Payout",
     private: true,
   },
 ];

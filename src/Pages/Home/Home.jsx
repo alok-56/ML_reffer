@@ -20,6 +20,7 @@ import {
   GetMemberByMonthApi,
   GetTransactionByMonthApi,
 } from "../../Api/Dashboard";
+import MetaMaskApp from "../metamask";
 
 const Home = () => {
   const [totalAmount, setTotalAmount] = useState(0);
@@ -102,6 +103,7 @@ const Home = () => {
   };
   return (
     <Container className="mt-4 mt-sm-2 mt-md-4" fluid style={{ width: "95%" }}>
+      <MetaMaskApp></MetaMaskApp>
       <Row className="mt-4">
         <Col md={4}>
           <Card className="info-card mt-2 mt-sm-3 mt-md-4">

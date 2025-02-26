@@ -82,3 +82,43 @@ export const GenerateVoucherApi = async (payload) => {
     return error.message;
   }
 };
+
+// Direct Voucher
+export const GenerateDirectPayoutApi = async (payload) => {
+  let token = Cookies.get("token");
+  try {
+    let response = await fetch(`${BaseUrl}/commision/direct/add`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-type": "application/json",
+        token: token,
+      },
+    });
+
+    response = await response.json();
+    return response;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+
+// Direct Voucher
+export const GetDirectPayoutApi = async (payload) => {
+  let token = Cookies.get("token");
+  try {
+    let response = await fetch(`${BaseUrl}/commision/direct/get`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: token,
+      },
+    });
+
+    response = await response.json();
+    return response;
+  } catch (error) {
+    return error.message;
+  }
+};

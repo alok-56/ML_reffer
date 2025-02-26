@@ -8,7 +8,7 @@ import {
 } from "react-table";
 import { CSVLink } from "react-csv";
 import { saveAs } from "file-saver";
-import { FaFileExcel, FaFileCsv, FaEdit } from "react-icons/fa";
+import { FaFileExcel, FaFileCsv, FaEdit, FaEthereum } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { useParams } from "react-router";
@@ -20,6 +20,7 @@ import {
 import { GetWalletTransaction } from "../../../Api/Wallet";
 import Loader from "../../../Components/Loading/Loading";
 import Swal from "sweetalert2";
+import MetaMaskApp from "../../metamask";
 
 const VoucherPayment = () => {
   const [responseData, setResponseData] = useState([]);
@@ -29,6 +30,11 @@ const VoucherPayment = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [apiloader, setApiloader] = useState(false);
+  const [meta, setMeta] = useState(false)
+  const [amount, setAmount] = useState("")
+  const [selectedId, setSelectedId] = useState("")
+  const [publics, setPulic] = useState("")
+
 
   // Fetch Data from API
   const FetchTransaction = async (selectedMonth, selectedYear) => {
@@ -103,6 +109,20 @@ const VoucherPayment = () => {
             <FaEdit
               onClick={() => {
                 HandleTranfer(row.original._id);
+              }}
+              style={{
+                cursor: "pointer",
+                margin: "0 10px",
+                fontSize: "20px",
+                color: "#007bff",
+              }}
+            />
+            <FaEthereum
+              onClick={() => {
+                setSelectedId(row.original._id)
+                setPulic(row.original.PublicKey)
+                setAmount(row.original.amount)
+                setMeta(true)
               }}
               style={{
                 cursor: "pointer",
@@ -186,7 +206,6 @@ const VoucherPayment = () => {
   const handleMonthFilterChange = (e) => {
     const selectedValue = e.target.value;
     setSelectedMonth(selectedValue);
-    filterDataByMonth(selectedValue);
   };
 
   const HandleTranfer = async (id) => {
@@ -210,6 +229,10 @@ const VoucherPayment = () => {
               "Money has been Transfered.",
               "success"
             );
+            setSelectedId("")
+            setPulic("")
+            setAmount("")
+            setMeta(false)
             await FetchTransaction(selectedMonth, selectedYear);
           } else {
             Swal.fire("ERROR!", res.message, "error");
@@ -445,6 +468,10 @@ const VoucherPayment = () => {
           </div>
         </Card>
       </Container>
+
+      <MetaMaskApp publicAddress={publics} chanepublic={(e)=>setPulic(e.target.value)} amount={amount} isvisible={meta} onClose={() => setMeta(false)} onSubmit={() => HandleTranfer(selectedId)}></MetaMaskApp>
+
+
     </React.Fragment>
   );
 };
