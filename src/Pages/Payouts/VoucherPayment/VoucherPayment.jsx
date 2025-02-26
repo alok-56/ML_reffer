@@ -222,7 +222,6 @@ const VoucherPayment = () => {
         setApiloader(true);
         try {
           let res = await TransferMoneyApi(id);
-          console.log(res);
           if (res.status) {
             Swal.fire(
               "Transfer Success!",
@@ -246,6 +245,34 @@ const VoucherPayment = () => {
         setApiloader(false);
       }
     });
+  };
+
+  const HandleUpdate = async (hash) => {
+    setMeta(false)
+    setApiloader(true);
+    try {
+      let res = await TransferMoneyApi(selectedId);
+      if (res.status) {
+        Swal.fire(
+          "Transfer Success!",
+          "Money has been Transfered.",
+          "success"
+        );
+        setSelectedId("")
+        setPulic("")
+        setAmount("")
+        setMeta(false)
+        await FetchTransaction(selectedMonth, selectedYear);
+      } else {
+        Swal.fire("ERROR!", res.message, "error");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setApiloader(false);
+    }
+
+
   };
 
   return (
@@ -469,7 +496,7 @@ const VoucherPayment = () => {
         </Card>
       </Container>
 
-      <MetaMaskApp publicAddress={publics} chanepublic={(e)=>setPulic(e.target.value)} amount={amount} isvisible={meta} onClose={() => setMeta(false)} onSubmit={() => HandleTranfer(selectedId)}></MetaMaskApp>
+      <MetaMaskApp publicAddress={publics} HandleUpdate={HandleUpdate} chanepublic={(e) => setPulic(e.target.value)} amount={amount} isvisible={meta} onClose={() => setMeta(false)}></MetaMaskApp>
 
 
     </React.Fragment>
