@@ -39,6 +39,7 @@ const DirectPayout = () => {
     const [users, setUsers] = useState([]);
     const [type, setType] = useState("")
     const [publicurl, setPublicurl] = useState("")
+    const [connected, setConnected] = useState(false)
 
     // Fetch Data from API
     const FetchTransaction = async () => {
@@ -60,9 +61,30 @@ const DirectPayout = () => {
     };
 
     useEffect(() => {
+
         FetchTransaction();
         FetchUsers()
+
     }, []);
+
+    useEffect(() => {
+        if (window.ethereum) {
+            window.ethereum.request({ method: "eth_accounts" })
+                .then((accounts) => {
+                    if (accounts.length > 0) {
+                        accountChangeHandler(true)
+                    } else {
+                        accountChangeHandler(false)
+                    }
+                })
+                .catch(err => Swal.fire("Error", err.message, "error"));
+        }
+    }, [])
+
+    const accountChangeHandler = (status) => {
+        setConnected(status)
+    };
+
 
     // Month Names for Dropdown
     const monthNames = [
@@ -363,6 +385,27 @@ const DirectPayout = () => {
             .toFixed(2);
     }, [page]);
 
+
+
+    const connectWallet = async () => {
+        if (window.ethereum) {
+            try {
+                const accounts = await window.ethereum.request({
+                    method: "eth_requestAccounts",
+                });
+                Swal.fire("Success!", "Connected to MetaMask", "success");
+                accountChangeHandler(true)
+                return accounts[0]
+            } catch (err) {
+                Swal.fire("Error!", err.message, "error");
+            } finally {
+
+            }
+        } else {
+            Swal.fire("Info", "Please install MetaMask extension!", "info");
+        }
+    };
+
     return (
         <React.Fragment>
             {apiloader && <Loader></Loader>}
@@ -605,7 +648,16 @@ const DirectPayout = () => {
                 className="modal-dialog-centered"
             >
                 <ModalHeader toggle={() => setModalOpen(!modalOpen)}>
-                    Add Direct Amount
+                    <div style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <p style={{ margin: 0 }}>Add Direct Amount</p>
+                        {
+                            !connected && <Button style={{ marginLeft: 100 }} color="primary" onClick={connectWallet}>
+                                Connect to Wallet
+                            </Button>
+                        }
+
+
+                    </div>
                 </ModalHeader>
                 <ModalBody>
 

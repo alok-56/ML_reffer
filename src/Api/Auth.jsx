@@ -60,3 +60,24 @@ export const ChangepasswordApi = async (payload) => {
     return error.message;
   }
 };
+
+// Update Address
+
+export const UpdatePubicaddressApi = async (payload) => {
+  let token = Cookies.get("token");
+  try {
+    let response = await fetch(`${BaseUrl}/admin/update/details`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-type": "application/json",
+        "token": token
+      },
+    });
+
+    response = await response.json();
+    return response;
+  } catch (error) {
+    return error.message;
+  }
+};

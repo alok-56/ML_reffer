@@ -13,7 +13,7 @@ import {
 import avatar from "../Assests/avatar.png";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-import { ChangepasswordApi } from "../Api/Auth";
+import { ChangepasswordApi, UpdatePubicaddressApi } from "../Api/Auth";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Components/Loading/Loading";
 
@@ -22,10 +22,46 @@ const Profile = () => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false)
+    const [publicaddress, setPublichAddress] = useState("")
     const navigate = useNavigate()
 
     let res = Cookies.get("data")
     res = JSON.parse(res)
+
+
+    const UpdateAddress = async () => {
+        if (!publicaddress) {
+            Swal.fire({
+                title: "Error!",
+                text: "Public Address is Required",
+                icon: "error",
+            });
+            return
+        }
+
+        setLoading(true)
+        let res = await UpdatePubicaddressApi({
+            "publicKey": publicaddress
+        })
+        console.log(res)
+        if (res.status) {
+            Swal.fire({
+                title: "Success!",
+                text: "Address Updated Successfully",
+                icon: "success",
+            });
+            setLoading(false)
+        } else {
+            setLoading(false)
+            Swal.fire({
+                title: "Error!",
+                text: res.message,
+                icon: "error",
+            });
+        }
+
+
+    }
 
 
 
@@ -106,6 +142,7 @@ const Profile = () => {
                                         <div className="text-muted">
                                             <h5>{res?.Name}</h5>
                                             <p className="mb-1">{res?.Email}</p>
+                                            <p>metamask :- {res.publicKey}</p>
 
                                         </div>
                                     </div>
@@ -115,7 +152,7 @@ const Profile = () => {
                     </Col>
                 </Row>
 
-                <h4 className="card-title mt-4 text-center">CHANGE USER PASSWORD</h4>
+                <h4 className="card-title mt-4 text-center">CHANGE YOUR PASSWORD</h4>
 
                 <Card className="mt-3">
                     <CardBody>
@@ -163,6 +200,34 @@ const Profile = () => {
                             <div className="text-center mt-4">
                                 <Button type="submit" color="danger">
                                     UPDATE PASSWORD
+                                </Button>
+                            </div>
+                        </Form>
+                    </CardBody>
+                </Card>
+
+                <h4 className="card-title mt-4 text-center">CHANGE USER METAMASK ADDRESS</h4>
+
+                <Card className="mt-3">
+                    <CardBody>
+                        <Form className="form-horizontal" onSubmit={UpdateAddress}>
+                            {/* Current Password */}
+                            <div className="form-group">
+                                <Label className="form-label">CURRENT ADDRESS</Label>
+                                <Input
+                                    name="publickey"
+                                    className="form-control"
+                                    placeholder="PLEASE ENTER PUBLIC ADDRESS"
+                                    type="textarea"
+                                    value={publicaddress}
+                                    onChange={(e) => setPublichAddress(e.target.value)}
+                                />
+                            </div>
+
+                            {/* Submit Button */}
+                            <div className="text-center mt-4">
+                                <Button type="submit" color="danger">
+                                    UPDATE ADDRESS
                                 </Button>
                             </div>
                         </Form>
